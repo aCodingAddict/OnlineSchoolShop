@@ -13,6 +13,8 @@ File Encoding         : 65001
 Date: 2019-05-13 11:44:21
 */
 
+use db_shopmaster;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
