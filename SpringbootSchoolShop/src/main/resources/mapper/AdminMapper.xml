@@ -126,14 +126,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="adminid != null">
-        #{adminid,jdbcType=INTEGER},
+      <if test="adminid != null"> #{adminid,jdbcType=INTEGER},
       </if>
-      <if test="adminname != null">
-        #{adminname,jdbcType=VARCHAR},
+      <if test="adminname != null"> #{adminname,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
+      <if test="password != null"> #{password,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
