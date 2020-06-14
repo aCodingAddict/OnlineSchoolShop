@@ -1,6 +1,5 @@
 package com.zhang.ssmschoolshop.controller.front;
 
-
 import com.zhang.ssmschoolshop.entity.*;
 import com.zhang.ssmschoolshop.service.CateService;
 import com.zhang.ssmschoolshop.service.GoodsService;
@@ -22,7 +21,6 @@ public class MainController {
     @Autowired
     private GoodsService goodsService;
 
-
     @RequestMapping("/")
     public String showAdmin(Model model, HttpSession session) {
         Integer userid;
@@ -32,28 +30,21 @@ public class MainController {
         } else {
             userid = user.getUserid();
         }
-
-        //数码分类
+        // 数码分类
         List<Goods> digGoods = getCateGoods("数码", userid);
         model.addAttribute("digGoods", digGoods);
-
-        //家电
+        // 家电
         List<Goods> houseGoods = getCateGoods("家电", userid);
         model.addAttribute("houseGoods", houseGoods);
-
-        //服饰
+        // 服饰
         List<Goods> colGoods = getCateGoods("服饰", userid);
         model.addAttribute("colGoods", colGoods);
-
-        //书籍
+        // 书籍
         List<Goods> bookGoods = getCateGoods("书籍", userid);
         model.addAttribute("bookGoods", bookGoods);
 
         return "main";
     }
-
-
-
 
     @RequestMapping("/main")
     public String showAllGoods(Model model, HttpSession session) {
@@ -64,16 +55,16 @@ public class MainController {
         } else {
             userid = user.getUserid();
         }
-        //数码分类
+        // 数码分类
         List<Goods> digGoods = getCateGoods("数码", userid);
         model.addAttribute("digGoods", digGoods);
-        //家电
+        // 家电
         List<Goods> houseGoods = getCateGoods("家电", userid);
         model.addAttribute("houseGoods", houseGoods);
-        //服饰
+        // 服饰
         List<Goods> colGoods = getCateGoods("服饰", userid);
         model.addAttribute("colGoods", colGoods);
-        //书籍
+        // 书籍
         List<Goods> bookGoods = getCateGoods("书籍", userid);
         model.addAttribute("bookGoods", bookGoods);
 
@@ -81,7 +72,7 @@ public class MainController {
     }
 
     public List<Goods> getCateGoods(String cate, Integer userid) {
-        //查询分类
+        // 查询分类
         CategoryExample digCategoryExample = new CategoryExample();
         digCategoryExample.or().andCatenameLike(cate);
         List<Category> digCategoryList = cateService.selectByExample(digCategoryExample);
@@ -90,10 +81,10 @@ public class MainController {
             return null;
         }
 
-        //查询属于刚查到的分类的商品
+        // 查询属于刚查到的分类的商品
         GoodsExample digGoodsExample = new GoodsExample();
         List<Integer> digCateId = new ArrayList<Integer>();
-        for (Category tmp:digCategoryList) {
+        for (Category tmp : digCategoryList) {
             digCateId.add(tmp.getCateid());
         }
         digGoodsExample.or().andCategoryIn(digCateId);
@@ -101,9 +92,9 @@ public class MainController {
         List<Goods> goodsList = goodsService.selectByExampleLimit(digGoodsExample);
 
         List<Goods> goodsAndImage = new ArrayList<>();
-        //获取每个商品的图片
-        for (Goods goods:goodsList) {
-            //判断是否为登录状态
+        // 获取每个商品的图片
+        for (Goods goods : goodsList) {
+            // 判断是否为登录状态
             if (userid == null) {
                 goods.setFav(false);
             } else {
