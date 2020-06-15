@@ -19,15 +19,6 @@ import com.zhang.ssmschoolshop.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;hoolshop.entity.GoodsExample;
-import com.zhang.ssmschoolshop.entity.ImagePath;
-import com.zhang.ssmschoolshop.entity.User;
-import com.zhang.ssmschoolshop.service.CateService;
-import com.zhang.ssmschoolshop.service.GoodsService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
