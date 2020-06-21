@@ -1,27 +1,40 @@
 package com.zhang.ssmschoolshop.controller.front;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhang.ssmschoolshop.entity.*;
+import com.zhang.ssmschoolshop.entity.Address;
+import com.zhang.ssmschoolshop.entity.AddressExample;
+import com.zhang.ssmschoolshop.entity.Favorite;
+import com.zhang.ssmschoolshop.entity.FavoriteExample;
+import com.zhang.ssmschoolshop.entity.Goods;
+import com.zhang.ssmschoolshop.entity.GoodsExample;
+import com.zhang.ssmschoolshop.entity.ImagePath;
+import com.zhang.ssmschoolshop.entity.Order;
+import com.zhang.ssmschoolshop.entity.OrderExample;
+import com.zhang.ssmschoolshop.entity.OrderItem;
+import com.zhang.ssmschoolshop.entity.OrderItemExample;
+import com.zhang.ssmschoolshop.entity.User;
+import com.zhang.ssmschoolshop.entity.UserExample;
 import com.zhang.ssmschoolshop.service.AddressService;
 import com.zhang.ssmschoolshop.service.GoodsService;
 import com.zhang.ssmschoolshop.service.OrderService;
 import com.zhang.ssmschoolshop.service.UserService;
 import com.zhang.ssmschoolshop.util.Md5Util;
 import com.zhang.ssmschoolshop.util.Msg;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 public class CustomerController {
@@ -57,11 +70,11 @@ public class CustomerController {
         }
     }
 
-
     @RequestMapping("/loginconfirm")
-    public String loginConfirm(User user, Model loginResult, HttpServletRequest request, @RequestParam("confirmlogo") String confirmlogo) {
+    public String loginConfirm(User user, Model loginResult, HttpServletRequest request,
+            @RequestParam("confirmlogo") String confirmlogo) {
         System.out.println("传进来的用户帐号和密码为:" + user);
-        //进行用户密码MD5加密验证
+        // 进行用户密码MD5加密验证
         user.setPassword(Md5Util.MD5Encode(user.getPassword(), "UTF-8"));
         HttpSession session = request.getSession();
         String verificationCode = (String) session.getAttribute("certCode");
@@ -216,7 +229,6 @@ public class CustomerController {
         return "list";
     }
 
-
     @RequestMapping("/deleteList")
     @ResponseBody
     public Msg deleteList(Order order) {
@@ -226,20 +238,22 @@ public class CustomerController {
 
     /**
      * 收藏商品
+     * 
      * @param pn
      * @param request
      * @param model
      * @return
      */
     @RequestMapping("/info/favorite")
-    public String showFavorite(@RequestParam(value = "page", defaultValue = "1") Integer pn, HttpServletRequest request, Model model) {
+    public String showFavorite(@RequestParam(value = "page", defaultValue = "1") Integer pn, HttpServletRequest request,
+            Model model) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
         }
 
-        //一页显示几个数据
+        // 一页显示几个数据
         PageHelper.startPage(pn, 16);
 
         FavoriteExample favoriteExample = new FavoriteExample();
@@ -258,7 +272,7 @@ public class CustomerController {
             goodsList = goodsService.selectByExample(goodsExample);
         }
 
-        //获取图片地址
+        // 获取图片地址
         for (int i = 0; i < goodsList.size(); i++) {
             Goods goods = goodsList.get(i);
 
@@ -266,13 +280,13 @@ public class CustomerController {
 
             goods.setImagePaths(imagePathList);
 
-            //判断是否收藏
+            // 判断是否收藏
             goods.setFav(true);
 
             goodsList.set(i, goods);
         }
 
-        //显示几个页号
+        // 显示几个页号
         PageInfo page = new PageInfo(goodsList, 5);
         model.addAttribute("pageInfo", page);
 
@@ -302,7 +316,10 @@ public class CustomerController {
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        System.out.println(session + "\n=============================");
+
         session.removeAttribute("user");
+        System.out.println(session);
         return "redirect:/login";
     }
 
